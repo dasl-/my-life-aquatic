@@ -1,0 +1,2 @@
+module AquariaHelper
+end

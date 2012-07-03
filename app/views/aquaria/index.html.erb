@@ -1,0 +1,12 @@
+<canvas id="mycanvas" data-processing-sources="processing/anything.pde"></canvas>
+
+<button id="button">Click me</button>
+
+<script>
+
+    $("#button").click(function() {
+        var p = Processing.getInstanceById('mycanvas');
+
+        p.setRadius();
+    });
+</script>
