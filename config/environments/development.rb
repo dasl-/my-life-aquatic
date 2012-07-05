@@ -1,4 +1,11 @@
 MyAquarium::Application.configure do
+
+  require 'pusher'
+
+  Pusher.app_id = '23259'
+  Pusher.key = '14bbe7d2ac1504c5683f'
+  Pusher.secret = '0458bbfa924348a9364a'
+    
   # Settings specified here will take precedence over those in config/application.rb
 
   # In the development environment your application's code is reloaded on

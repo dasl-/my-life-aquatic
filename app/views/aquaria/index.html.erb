@@ -1,12 +1,56 @@
-<canvas id="mycanvas" data-processing-sources="processing/anything.pde"></canvas>
+<canvas id="mycanvas" data-processing-sources="processing/aquarium.pde"></canvas>
 
 <button id="button">Click me</button>
 
 <script>
-
     $("#button").click(function() {
         var p = Processing.getInstanceById('mycanvas');
-
-        p.setRadius();
+        var myCircle = p.getMyCircle().getX();
+        alert(myCircle);
+  //      p.increaseMyRadius();
     });
+</script>
+
+<script type="text/javascript">
+  var pusher = new Pusher(<%= render_pusher_key %>);
+  var channel = pusher.subscribe("private-aquarium");  
+
+  channel.bind('pusher:subscription_succeeded', function() {
+    var p = Processing.getInstanceById('mycanvas');
+    var myCircle = p.getMyCircle();
+    channel.trigger("client-update", 
+      {
+        x: myCircle.getX(),
+        y: myCircle.getY(),
+        mouseX: myCircle.getMouseX(),
+        mouseY: myCircle.getMouseY(),
+        color: myCircle.getColor(),
+        radius: myCircle.getRadius(),
+        id: myCircle.getId()
+      });
+  });
+
+  channel.bind('pusher:subscription_error', function(status) {
+    alert("pusher subscription failed: " + status);
+  });
+
+  channel.bind('client-update', function(data) {
+    var p = Processing.getInstanceById('mycanvas');
+    p.updateRemote(data.x, data.y, data.color, data.radius, data.id, data.mouseX, data.mouseY);
+  });
+
+  setInterval(function(){
+    var p = Processing.getInstanceById('mycanvas');
+    var myCircle = p.getMyCircle();
+    channel.trigger("client-update",
+      {
+        x: myCircle.getX(),
+        y: myCircle.getY(),
+        mouseX: myCircle.getMouseX(),
+        mouseY: myCircle.getMouseY(),
+        color: myCircle.getColor(),
+        radius: myCircle.getRadius(),
+        id: myCircle.getId()
+        });
+  }, 100); // send every 200 milliseconds if position has changed  
 </script>

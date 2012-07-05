@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.6'
+gem 'bootstrap-sass', '2.0.0'
 gem 'pusher'
 
 group :development do
