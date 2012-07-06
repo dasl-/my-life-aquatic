@@ -40,7 +40,7 @@ class Fish extends Boid {
 		tailSizeH		= bodySizeH * 0.25;
 		
         id = "" + random(1000000);
-        //mousePosition = new PVector(0, 0);
+        mousePosition = new PVector(0, 0);
 
 		body = new Flagellum( bodySizeW, bodySizeH, numBodySegments );
 		
@@ -83,7 +83,7 @@ class Fish extends Boid {
 		finL.muscleFreq 	= norm( super.velocity.mag(), 0, 1 ) * 0.04;
 		finL.swim();
 
-        //seek(mousePosition);
+        seek(mousePosition);
 	}
 	
 	

@@ -32,6 +32,5 @@ void mouseMoved() {
     PVector mouseVector = new PVector(mouseX, mouseY);
     Fish fish = fishes.get( myId );
     fish.setMousePosition(mouseVector);
-    fish.seek(fish.getMousePosition());
 }
 
