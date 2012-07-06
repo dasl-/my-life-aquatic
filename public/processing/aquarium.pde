@@ -55,8 +55,8 @@ public void updateRemote(int x, int y, int[] color, float radius, String id, int
         myCircles.put(id, remoteCircle);
     }
     else {
-        remoteCircle.setX(x);
-        remoteCircle.setY(y);
+        //remoteCircle.setX(x);
+        //remoteCircle.setY(y);
         //remoteCircle.setColor(color);
         //remoteCircle.setRadius(radius);
         remoteCircle.setMouseX(mouseX);
