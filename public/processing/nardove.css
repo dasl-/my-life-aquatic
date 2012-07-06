@@ -1,0 +1,84 @@
+body {
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	background-color: #69d2e7;
+	overflow: hidden;
+	font-size: 62.5%;
+	font-family: sans-serif, "Arial";
+}
+
+
+canvas {
+	margin: 0px;
+	padding: 0px;
+	position: absolute;
+	/*background: #3c3b3b;*/
+	pointer-events: none;
+	position: absolute;
+}
+
+
+#content {
+	margin: 0px;
+	padding: 50px;
+	width: 400px;
+	height: 400px;
+	display: inline-block;
+	/*overflow: hidden;*/
+	position: absolute;
+}
+	
+	#content #logo {
+		
+	}
+	
+	#content h1 {
+		margin: 10px 0px 0px 0px;
+		color: #fff;
+		font-weight: 100;
+		font-size: 3.6em;
+	}
+	
+	#content h2 {
+		margin: 0px;
+		line-height: 1.0em;
+		/*font-weight: 100;*/
+		color: #573E31;
+	}
+	
+	#content p {
+		font-size: 1.4em;
+		color: #573E31;
+	}
+	
+		#content p a {
+			text-decoration: none;
+			color: #fff;
+			font-weight: bold;
+		}
+		
+		
+#jellies-btn {
+	margin: 0px 5px;
+	width: 64px;
+	height: 64px;
+	display: inline-block;
+	background: url("../images/jellies-button.png") no-repeat;
+	cursor: pointer;
+}
+
+#pond-btn {
+	margin: 0px 5px;
+	width: 64px;
+	height: 64px;
+	display: inline-block;
+	background: url("../images/pond-button.png") no-repeat;
+	cursor: pointer;
+}
+
+
+.not-found-error {
+	font-size: 3.6em;
+	color: #fff;
+}
