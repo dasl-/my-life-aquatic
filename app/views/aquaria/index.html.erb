@@ -36,7 +36,7 @@
 
   channel.bind('client-update', function(data) {
     var p = Processing.getInstanceById('mycanvas');
-    p.updateRemote(data.x, data.y, data.color, data.radius, data.id, data.mouseX, data.mouseY);
+    p.updateRemote(data.x, data.y, data.color, data.radius, data.id, data.mouseX, data.mouseY, data);
   });
 
   setInterval(function(){
@@ -51,6 +51,6 @@
         color: myCircle.getColor(),
         radius: myCircle.getRadius(),
         id: myCircle.getId()
-        });
+      });
   }, 100); // send every 200 milliseconds if position has changed  
 </script>

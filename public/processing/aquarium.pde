@@ -11,8 +11,8 @@ void setup(){
     canvasHeight = 500; //$(window).height() - 100;
     
     size(canvasWidth, canvasHeight);
-    strokeWeight( 10 );
-    frameRate( 15 );
+    strokeWeight(10);
+    frameRate(15);
 
     myCircle = new MyCircle();
     myCircles = new HashMap<MyCircle>();
@@ -23,10 +23,22 @@ void draw(){
     // Fill canvas blue
     background(#69D2E7);
 
-    myCircle.drawLocal();
+    myCircle.draw();
 
-    for (MyCircle circle : myCircles.values()) {
-        circle.drawLocal();
+    Iterator it = myCircles.entrySet().iterator();
+    while (it.hasNext()) {
+        Map.Entry pair = (Map.Entry)it.next();
+        MyCircle circle = (MyCircle) pair.getValue();
+
+    
+    /*    if (millis() - circle.getLastUpdatedAt() > 1000 * 5) {
+            it.remove();
+        }
+        else {
+            circle.draw();
+        }*/
+
+        circle.draw();
     }
 }
 
@@ -72,6 +84,7 @@ class MyCircle {
     private int[] color = new int[3];
     private float radius;
     private String id;
+    private int lastUpdatedAt;
 
     public MyCircle() {
         this.color[0] = int(random(255));
@@ -83,6 +96,7 @@ class MyCircle {
         this.id = "" + random(1000000);
         this.mouseX = 0;
         this.mouseY = 0;
+        this.lastUpdatedAt = millis();
     }
 
     public MyCircle(int x, int y, int[] color, float radius, String id, int mouseX, int mouseY) {
@@ -93,9 +107,10 @@ class MyCircle {
         this.id = id;
         this.mouseX = mouseX;
         this.mouseY = mouseY;
+        this.lastUpdatedAt = millis();
     }
 
-    public void drawLocal() {
+    public void draw() {
         radius += sin(frameCount / 4);
         x += (mouseX - x) / delay;
         y += (mouseY - y) / delay;
@@ -105,12 +120,6 @@ class MyCircle {
         // Set stroke-color white
         stroke(255); 
 
-        ellipse(x, y, radius, radius); 
-    }
-
-    public void drawRemote() {
-        fill(color[0], color[1], color[2]);
-        stroke(255); 
         ellipse(x, y, radius, radius); 
     }
 
@@ -164,5 +173,13 @@ class MyCircle {
 
     public void setMouseY(int mouseY) {
         this.mouseY = mouseY;
+    }
+
+    public int getLastUpdatedAt() {
+        return this.lastUpdatedAt;
+    }
+
+    public void setLastUpdatedAt(int lastUpdatedAt) {
+        this.lastUpdatedAt = lastUpdatedAt;
     }
 }
