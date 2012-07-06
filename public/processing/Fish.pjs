@@ -7,8 +7,6 @@ class Fish extends Boid {
 	Flagellum finR;
 	Flagellum finL;
 	
-	int[] colors;
-	
 	int numBodySegments;
 	int numTailSegments;
 	int numFinSegments;
@@ -18,13 +16,20 @@ class Fish extends Boid {
 	
 	float tailSizeW;
 	float tailSizeH;
+    Color main;
+    Color stripe;
+    Color outline;
+    String id;
+    PVector mousePosition;
 	
 	
 	
-	Fish( int[] _colors, PVector _location, float _maxSpeed, float _maxForce ) {
+	Fish( PVector _location, float _maxSpeed, float _maxForce ) {
 		super( _location, _maxSpeed, _maxForce );
 		
-		colors 			= _colors;
+        main = #000000;
+        stripe = color(int(random(255)), int(random(255)), int(random(255)));
+        outline = #D8D8C0;
 		
 		numBodySegments = 10;
 		bodySizeW		= random( 100, 200 );
@@ -34,6 +39,9 @@ class Fish extends Boid {
 		tailSizeW		= bodySizeW * 0.6;
 		tailSizeH		= bodySizeH * 0.25;
 		
+        id = "" + random(1000000);
+        //mousePosition = new PVector(0, 0);
+
 		body = new Flagellum( bodySizeW, bodySizeH, numBodySegments );
 		
 		tailR = new Flagellum( tailSizeW, tailSizeH, numTailSegments );
@@ -49,7 +57,6 @@ class Fish extends Boid {
 		super.update();
 		super.checkBorders( bodySizeW );
 		// super.wander();
-		
 		
 		body.muscleFreq = norm( super.velocity.mag(), 0, 1 ) * 0.05;
 		
@@ -75,6 +82,8 @@ class Fish extends Boid {
 		
 		finL.muscleFreq 	= norm( super.velocity.mag(), 0, 1 ) * 0.04;
 		finL.swim();
+
+        //seek(mousePosition);
 	}
 	
 	
@@ -87,26 +96,26 @@ class Fish extends Boid {
 		PVector finLLocation = new PVector( super.location.x + body.spine[3][0], super.location.y + body.spine[3][1] );
 		PVector finRLocation = new PVector( super.location.x + body.spine[3][0], super.location.y + body.spine[3][1] );
 		
-		fill( colors[0] );
+		fill(main);
 		renderFin( finR, finLLocation,  bodySizeH * 0.5,  1 );
 		renderFin( finL, finRLocation, -bodySizeH * 0.5, -1 );
 		
 		
 		// render body
-		fill( colors[2] );
+		fill( outline );
 		renderBody( body, super.location, 1.1, 0.1 );
 		
-		fill( colors[1] );
+		fill( stripe );
 		renderBody( body, super.location, 0.8, 0.15 );
 		
-		fill( colors[0] );
+		fill( main );
 		renderBody( body, super.location, 0.5, 0.25 );
 		
 		
 		// render tails
 		PVector tailLocation = new PVector( super.location.x + body.spine[numBodySegments - 1][0], super.location.y + body.spine[numBodySegments - 1][1] );
 		
-		fill( colors[0] );
+		fill( main );
 		renderTail( tailR, tailLocation, 0.75 );
 		renderTail( tailL, tailLocation, 0.75 );
 		
@@ -128,10 +137,10 @@ class Fish extends Boid {
 		translate( _location.x, _location.y );
 		rotate( angle );
 		
-		fill( colors[0] );
+		fill( main );
 		ellipse( 0, _eyeDist, _eyeSize, _eyeSize );
 		
-		fill( colors[1] );
+		fill( stripe );
 		ellipse( -3, _eyeDist, _eyeSize * 0.35, _eyeSize * 0.35 );
 		
 		popMatrix();
@@ -141,10 +150,10 @@ class Fish extends Boid {
 		translate( _location.x, _location.y );
 		rotate( angle );
 		
-		fill( colors[0] );
+		fill( main );
 		ellipse( 0, -_eyeDist, _eyeSize, _eyeSize );
 		
-		fill( colors[1] );
+		fill( stripe );
 		ellipse( -3, -_eyeDist, _eyeSize * 0.35, _eyeSize * 0.35 );
 		
 		popMatrix();
@@ -267,4 +276,42 @@ class Fish extends Boid {
 		
 		popMatrix();
 	}
+
+    // Getters
+    public color getStripe() {
+        return stripe;
+    }
+    
+    public PVector getLocation() {
+        return location;
+    }
+
+    public float getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public float getMaxForce() {
+        return maxForce;
+    }
+
+    public float getBodySizeW() {
+        return bodySizeW;
+    }
+
+    public float getBodySizeH() {
+        return bodySizeH;
+    }
+
+    public String getId(){
+        return id;
+    }
+    
+    public PVector getMousePosition() {
+        return mousePosition;
+    }
+
+    public void setMousePosition(PVector position) {
+        mousePosition = position;
+    }
 }
+

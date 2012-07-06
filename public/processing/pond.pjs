@@ -1,48 +1,37 @@
-int numBoids 		= 5;
-
-ArrayList boids 	= new ArrayList();
-
-int[] pinkColors 	= new int();
-int[] blueColors 	= new int();
-
+HashMap<Fish> fishes;
+String myId;
 var touches;
 
 
 void setup() {
 	size(1200, 500);
-	
+
+    fishes = new HashMap<Fish>();
 	//frameRate( 30 );
 	
-	pinkColors = [#000000, #E61961, #D8D8C0];
-	blueColors = [#000000, #1693A5, #D8D8C0];
-	
-	
-	// Create fishes
-	for ( int n = 0; n < numBoids; n++ ) {
-		PVector location = new PVector( random( 100, width - 100 ), random( 100, height - 100 ) );
-		
-		if ( n % 3 == 0 ) {
-			Fish fish = new Fish( pinkColors, location, random( 1.0, 3.5 ), 0.2 );
-		}
-		else {
-			Fish fish = new Fish( blueColors, location, random( 1.0, 3.5 ), 0.2 );
-		}
-		boids.add( fish );
-	}
+    PVector location = new PVector( random( 100, width - 100 ), random( 100, height - 100 ) );
+    Fish fish = new Fish( location, random( 1.0, 3.5 ), 0.2 );
+    myId = fish.getId();
+    fishes.put( myId, fish );
 }
 
 
 void draw() {
 	background( 105, 210, 231, 0 );
 	
-	
-	// Fish
-	//for ( int i = boids.size() - 1; i >= 0; i-- ) {
-	for ( int i = 0; i < boids.size(); i++ ) {
-		Fish fish = (Fish)boids.get( i );
+    Iterator it = fishes.entrySet().iterator();
+    while (it.hasNext()) {
+        Map.Entry pair = (Map.Entry)it.next();
+        Fish fish = (Fish) pair.getValue();
 		fish.update();
 		fish.render();
-		
     }
+}
+
+void mouseMoved() {
+    PVector mouseVector = new PVector(mouseX, mouseY);
+    Fish fish = fishes.get( myId );
+    fish.setMousePosition(mouseVector);
+    fish.seek(fish.getMousePosition());
 }
 
