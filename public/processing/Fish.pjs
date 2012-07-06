@@ -48,7 +48,7 @@ class Fish extends Boid {
 	void update() {
 		super.update();
 		super.checkBorders( bodySizeW );
-		super.wander();
+		// super.wander();
 		
 		
 		body.muscleFreq = norm( super.velocity.mag(), 0, 1 ) * 0.05;
