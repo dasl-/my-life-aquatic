@@ -6,13 +6,14 @@ var touches;
 
 
 void setup() {
-	size(1200, 500);
+
+	size($(window).width(), $(window).height());
 
     fishes = new HashMap<String, Fish>();
 	//frameRate( 30 );
 	
-    PVector location = new PVector( random( 100, width - 100 ), random( 100, height - 100 ) );
-    Fish fish = new Fish( location, random( 1.0, 3.5 ), 0.2 );
+    PVector locationScaleFactor = new PVector(random(0.2, 0.8), random(0.2, 0.8));
+    Fish fish = new Fish( locationScaleFactor, random( 1.0, 3.5 ), 0.2 );
     myId = fish.getId();
     fishes.put( myId, fish );
 
@@ -64,23 +65,26 @@ void draw() {
 }
 
 void mouseMoved() {
-    PVector mouseVector = new PVector(mouseX, mouseY);
+    PVector mouseVectorScaleFactor = new PVector(mouseX/width, mouseY/height);
     Fish fish = fishes.get( myId );
-    fish.setMousePosition(mouseVector);
+    fish.setMousePositionScaleFactor(mouseVectorScaleFactor);
 }
 
 Fish getMyFish() {
     return fishes.get(myId);
 }
 
-void updateRemote(PVector myLocation, PVector mousePosition, Color stripeColor, String id, float maxSpeed, float maxForce, float bodySizeW, float bodySizeH) {
+void updateRemote(PVector myLocationScaleFactor, PVector mousePositionScaleFactor, Color stripeColor, 
+	String id, float maxSpeed, float maxForce, float bodySizeW, float bodySizeH) {
     Fish remoteFish = fishes.get(id);
     if(remoteFish == null) {
-        remoteFish = new Fish(new PVector(myLocation.x, myLocation.y), new PVector(mousePosition.x, mousePosition.y), stripeColor, id, maxSpeed, maxForce, bodySizeW, bodySizeH);
+        remoteFish = new Fish(new PVector(myLocationScaleFactor.x, myLocationScaleFactor.y), 
+        	new PVector(mousePositionScaleFactor.x, mousePositionScaleFactor.y), 
+        	stripeColor, id, maxSpeed, maxForce, bodySizeW, bodySizeH);
         fishes.put(id, remoteFish);
     }
     else {
-        remoteFish.setMousePosition(new PVector(mousePosition.x, mousePosition.y));
+        remoteFish.setMousePositionScaleFactor(new PVector(mousePositionScaleFactor.x, mousePositionScaleFactor.y));
         remoteFish.setLastUpdateTime(millis());
     }
 }

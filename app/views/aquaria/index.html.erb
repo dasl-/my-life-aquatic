@@ -1,5 +1,5 @@
 <canvas id="mycanvas" data-processing-sources="processing/pond.pjs processing/Fish.pjs processing/Boid.pjs processing/Flagellum.pjs processing/Bubble.pjs"></canvas>
-<div id="debugger" style="border: 1px solid black; height: 30px; width: 100%"></div>
+<!-- <div id="debugger" style="border: 1px solid black; height: 30px; width: 100%"></div> -->
 
 <script type="text/javascript">
   var pusher = new Pusher(<%= render_pusher_key %>);
@@ -15,21 +15,21 @@
 
   channel.bind('client-update', function(data) {
     var p = Processing.getInstanceById('mycanvas');
-    p.updateRemote(data.myLocation, data.mousePosition, data.stripeColor, data.id, data.maxSpeed, data.maxForce, data.bodySizeW, data.bodySizeH);
+    p.updateRemote(data.myLocationScaleFactor, data.mousePositionScaleFactor, data.stripeColor, data.id, data.maxSpeed, data.maxForce, data.bodySizeW, data.bodySizeH);
   });
 
   setInterval(function(){
       sendUpdate();
-      printDebugInfo();
-  }, 100); // send every 200 milliseconds if position has changed  
+      //printDebugInfo();
+  }, 100); // send every 100 milliseconds if position has changed  
 
   function sendUpdate(){
     var p = Processing.getInstanceById('mycanvas');
     var myFish = p.getMyFish();
     channel.trigger("client-update",
       {
-        myLocation: myFish.getLocation(),
-        mousePosition: myFish.getMousePosition(),
+        myLocationScaleFactor: myFish.getLocationScaleFactor(),
+        mousePositionScaleFactor: myFish.getMousePositionScaleFactor(),
         stripeColor: myFish.getStripeColor(),
         id: myFish.getId(),
         maxSpeed: myFish.getMaxSpeed(),
@@ -48,5 +48,6 @@
 </script>
 
 <audio autoplay="autoplay">
+  <source src="audio/swimming-music.ogg" type="audio/ogg" />   
   <source src="audio/swimming-music.mp3" type="audio/mpeg" />
 </audio> 
