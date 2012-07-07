@@ -1,33 +1,12 @@
 <canvas id="mycanvas" data-processing-sources="processing/pond.pjs processing/Fish.pjs processing/Boid.pjs processing/Flagellum.pjs"></canvas>
-
-<button id="button">Click me</button>
-
-<script>
-    $("#button").click(function() {
-        var p = Processing.getInstanceById('mycanvas');
-        var myCircle = p.getMyCircle().getX();
-        alert(myCircle);
-  //      p.increaseMyRadius();
-    });
-</script>
+<div id="debugger" style="border: 1px solid black; height: 30px; width: 100%"></div>
 
 <script type="text/javascript">
   var pusher = new Pusher(<%= render_pusher_key %>);
   var channel = pusher.subscribe("private-aquarium");  
 
   channel.bind('pusher:subscription_succeeded', function() {
-    var p = Processing.getInstanceById('mycanvas');
-    var myCircle = p.getMyCircle();
-    channel.trigger("client-update", 
-      {
-        x: myCircle.getX(),
-        y: myCircle.getY(),
-        mouseX: myCircle.getMouseX(),
-        mouseY: myCircle.getMouseY(),
-        color: myCircle.getColor(),
-        radius: myCircle.getRadius(),
-        id: myCircle.getId()
-      });
+      sendUpdate();
   });
 
   channel.bind('pusher:subscription_error', function(status) {
@@ -36,21 +15,33 @@
 
   channel.bind('client-update', function(data) {
     var p = Processing.getInstanceById('mycanvas');
-    p.updateRemote(data.x, data.y, data.color, data.radius, data.id, data.mouseX, data.mouseY, data);
+    p.updateRemote(data.myLocation, data.mousePosition, data.stripeColor, data.id, data.maxSpeed, data.maxForce, data.bodySizeW, data.bodySizeH);
   });
 
   setInterval(function(){
+      sendUpdate();
+      printDebugInfo();
+  }, 100); // send every 200 milliseconds if position has changed  
+
+  function sendUpdate(){
     var p = Processing.getInstanceById('mycanvas');
-    var myCircle = p.getMyCircle();
+    var myFish = p.getMyFish();
     channel.trigger("client-update",
       {
-        x: myCircle.getX(),
-        y: myCircle.getY(),
-        mouseX: myCircle.getMouseX(),
-        mouseY: myCircle.getMouseY(),
-        color: myCircle.getColor(),
-        radius: myCircle.getRadius(),
-        id: myCircle.getId()
+        myLocation: myFish.getLocation(),
+        mousePosition: myFish.getMousePosition(),
+        stripeColor: myFish.getStripeColor(),
+        id: myFish.getId(),
+        maxSpeed: myFish.getMaxSpeed(),
+        maxForce: myFish.getMaxForce(),
+        bodySizeW: myFish.getBodySizeW(),
+        bodySizeH: myFish.getBodySizeH()
       });
-  }, 100); // send every 200 milliseconds if position has changed  
+    }
+
+  function printDebugInfo() {
+    var p = Processing.getInstanceById('mycanvas');
+    document.getElementById('debugger').innerHTML = p.getFishes().size();
+  }
+    
 </script>

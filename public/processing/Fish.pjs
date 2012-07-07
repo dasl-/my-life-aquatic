@@ -16,30 +16,42 @@ class Fish extends Boid {
 	
 	float tailSizeW;
 	float tailSizeH;
-    Color main;
-    Color stripe;
-    Color outline;
+    Color mainColor;
+    Color stripeColor;
+    Color outlineColor;
     String id;
     PVector mousePosition;
+
+    int timeSinceLastUpdate;
 	
-	
-	
-	Fish( PVector _location, float _maxSpeed, float _maxForce ) {
-		super( _location, _maxSpeed, _maxForce );
-		
-        main = #000000;
-        stripe = color(int(random(255)), int(random(255)), int(random(255)));
-        outline = #D8D8C0;
-		
-		numBodySegments = 10;
+	Fish( PVector location, float maxSpeed, float maxForce ) {
+        stripeColor = color(int(random(255)), int(random(255)), int(random(255)));
 		bodySizeW		= random( 100, 200 );
 		bodySizeH		= bodySizeW * 0.3 + random( 5 );
+        id = "" + random(1000000);
+        createFish(location, maxSpeed, maxForce);
+    }
+
+	Fish( PVector location, PVector mousePosition, Color stripeColor, String id, float maxSpeed, float maxForce, float bodySizeW, float bodySizeH ) {
+        this.mousePosition = mousePosition;
+        this.stripeColor = stripeColor;
+        this.id = id;
+        this.bodySizeW = bodySizeW;
+        this.bodySizeH = bodySizeH;
+        createFish(location, maxSpeed, maxForce);
+    }
+
+    void createFish(PVector location, float maxSpeed, float maxForce) {
+		super( location, maxSpeed, maxForce );
+        mainColor = #000000;
+        outlineColor = #D8D8C0;
+		
+		numBodySegments = 10;
 		
 		numTailSegments = 10;
 		tailSizeW		= bodySizeW * 0.6;
 		tailSizeH		= bodySizeH * 0.25;
 		
-        id = "" + random(1000000);
         mousePosition = new PVector(0, 0);
 
 		body = new Flagellum( bodySizeW, bodySizeH, numBodySegments );
@@ -50,6 +62,8 @@ class Fish extends Boid {
 		numFinSegments = 9;
 		finR = new Flagellum( tailSizeW * 0.5, tailSizeH, numFinSegments );
 		finL = new Flagellum( tailSizeW * 0.5, tailSizeH, numFinSegments );
+
+        lastUpdateTime = millis();
 	}
 	
 	
@@ -96,26 +110,26 @@ class Fish extends Boid {
 		PVector finLLocation = new PVector( super.location.x + body.spine[3][0], super.location.y + body.spine[3][1] );
 		PVector finRLocation = new PVector( super.location.x + body.spine[3][0], super.location.y + body.spine[3][1] );
 		
-		fill(main);
+		fill(mainColor);
 		renderFin( finR, finLLocation,  bodySizeH * 0.5,  1 );
 		renderFin( finL, finRLocation, -bodySizeH * 0.5, -1 );
 		
 		
 		// render body
-		fill( outline );
+		fill( outlineColor );
 		renderBody( body, super.location, 1.1, 0.1 );
 		
-		fill( stripe );
+		fill( stripeColor );
 		renderBody( body, super.location, 0.8, 0.15 );
 		
-		fill( main );
+		fill( mainColor );
 		renderBody( body, super.location, 0.5, 0.25 );
 		
 		
 		// render tails
 		PVector tailLocation = new PVector( super.location.x + body.spine[numBodySegments - 1][0], super.location.y + body.spine[numBodySegments - 1][1] );
 		
-		fill( main );
+		fill( mainColor );
 		renderTail( tailR, tailLocation, 0.75 );
 		renderTail( tailL, tailLocation, 0.75 );
 		
@@ -137,10 +151,10 @@ class Fish extends Boid {
 		translate( _location.x, _location.y );
 		rotate( angle );
 		
-		fill( main );
+		fill( mainColor );
 		ellipse( 0, _eyeDist, _eyeSize, _eyeSize );
 		
-		fill( stripe );
+		fill( stripeColor );
 		ellipse( -3, _eyeDist, _eyeSize * 0.35, _eyeSize * 0.35 );
 		
 		popMatrix();
@@ -150,10 +164,10 @@ class Fish extends Boid {
 		translate( _location.x, _location.y );
 		rotate( angle );
 		
-		fill( main );
+		fill( mainColor );
 		ellipse( 0, -_eyeDist, _eyeSize, _eyeSize );
 		
-		fill( stripe );
+		fill( stripeColor );
 		ellipse( -3, -_eyeDist, _eyeSize * 0.35, _eyeSize * 0.35 );
 		
 		popMatrix();
@@ -278,8 +292,8 @@ class Fish extends Boid {
 	}
 
     // Getters
-    public color getStripe() {
-        return stripe;
+    public Color getStripeColor() {
+        return stripeColor;
     }
     
     public PVector getLocation() {
@@ -310,8 +324,16 @@ class Fish extends Boid {
         return mousePosition;
     }
 
+    public int getLastUpdateTime() {
+        return lastUpdateTime;
+    }
+
     public void setMousePosition(PVector position) {
         mousePosition = position;
+    }
+
+    public void setLastUpdateTime(int time) {
+        lastUpdateTime = time;
     }
 }
 

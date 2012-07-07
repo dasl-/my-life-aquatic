@@ -1,4 +1,4 @@
-HashMap<Fish> fishes;
+HashMap<String, Fish> fishes;
 String myId;
 var touches;
 
@@ -6,7 +6,7 @@ var touches;
 void setup() {
 	size(1200, 500);
 
-    fishes = new HashMap<Fish>();
+    fishes = new HashMap<String, Fish>();
 	//frameRate( 30 );
 	
     PVector location = new PVector( random( 100, width - 100 ), random( 100, height - 100 ) );
@@ -23,8 +23,12 @@ void draw() {
     while (it.hasNext()) {
         Map.Entry pair = (Map.Entry)it.next();
         Fish fish = (Fish) pair.getValue();
-		fish.update();
-		fish.render();
+        if (millis() - fish.getLastUpdateTime() > 1000 && !fish.getId().equals(myId)) {
+            it.remove();
+        } else {
+            fish.update();
+            fish.render();
+        }
     }
 }
 
@@ -32,5 +36,25 @@ void mouseMoved() {
     PVector mouseVector = new PVector(mouseX, mouseY);
     Fish fish = fishes.get( myId );
     fish.setMousePosition(mouseVector);
+}
+
+Fish getMyFish() {
+    return fishes.get(myId);
+}
+
+void updateRemote(PVector myLocation, PVector mousePosition, Color stripeColor, String id, float maxSpeed, float maxForce, float bodySizeW, float bodySizeH) {
+    Fish remoteFish = fishes.get(id);
+    if(remoteFish == null) {
+        remoteFish = new Fish(new PVector(myLocation.x, myLocation.y), new PVector(mousePosition.x, mousePosition.y), stripeColor, id, maxSpeed, maxForce, bodySizeW, bodySizeH);
+        fishes.put(id, remoteFish);
+    }
+    else {
+        remoteFish.setMousePosition(new PVector(mousePosition.x, mousePosition.y));
+        remoteFish.setLastUpdateTime(millis());
+    }
+}
+
+void getFishes() {
+    return fishes;
 }
 
