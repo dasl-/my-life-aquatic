@@ -1,4 +1,6 @@
 HashMap<String, Fish> fishes;
+ArrayList<Bubble> foregroundBubbles;
+ArrayList<Bubble> backgroundBubbles; 
 String myId;
 var touches;
 
@@ -13,11 +15,27 @@ void setup() {
     Fish fish = new Fish( location, random( 1.0, 3.5 ), 0.2 );
     myId = fish.getId();
     fishes.put( myId, fish );
+
+    foregroundBubbles = new ArrayList<Bubble>();
+    backgroundBubbles = new ArrayList<Bubble>();
 }
 
 
 void draw() {
 	background( 105, 210, 231, 0 );
+
+    randomNumber = random(0, 100);
+
+    if( randomNumber > 98) {
+        foregroundBubbles.add(new Bubble( color(int(random(100, 255)), 200)));
+    } else if( randomNumber < 2) {
+        backgroundBubbles.add(new Bubble( color(int(random(100, 255)), 100)));
+    }
+
+    for (Bubble aBubble : backgroundBubbles) {
+        aBubble.update();
+        aBubble.render();
+    }
 
 	ArrayList<String> oldFishes = new ArrayList<String>();
 	
@@ -37,6 +55,12 @@ void draw() {
     for (String oldFishId : oldFishes) {
     	fishes.remove(oldFishId);
     }
+
+    for (Bubble aBubble : foregroundBubbles) {
+        aBubble.update();
+        aBubble.render();
+    }
+
 }
 
 void mouseMoved() {
@@ -63,5 +87,9 @@ void updateRemote(PVector myLocation, PVector mousePosition, Color stripeColor, 
 
 void getFishes() {
     return fishes;
+}
+
+void getBubble() {
+    return myBubble;
 }
 

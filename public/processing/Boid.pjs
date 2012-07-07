@@ -12,13 +12,22 @@ class Boid {
 	
 	
 	Boid( PVector _location, float _maxSpeed, float _maxForce ) {
+		velocity 		= new PVector( random( -maxSpeed, maxSpeed ), random( -maxSpeed, maxSpeed ) );
+        createBoid(_location, _maxSpeed, _maxForce);
+    }
+
+    Boid( PVector _location, float _maxSpeed, float _maxForce, PVector velocity) {
+        this.velocity = velocity.get();
+        createBoid(_location, _maxSpeed, _maxForce);
+    }
+
+    void createBoid(PVector _location, float _maxSpeed, float _maxForce) {
 		location 		= _location.get();
 		
 		maxSpeed 		= _maxSpeed;
 		maxForce 		= _maxForce;
 		
 		//velocity 		= new PVector( 0, 0 );
-		velocity 		= new PVector( random( -maxSpeed, maxSpeed ), random( -maxSpeed, maxSpeed ) );
 		acceleration 	= new PVector( 0, 0 );
 		
 		wanderTheta		= 0;
