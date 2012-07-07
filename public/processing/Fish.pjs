@@ -20,28 +20,33 @@ class Fish extends Boid {
     Color stripeColor;
     Color outlineColor;
     String id;
-    PVector mousePosition;
+    PVector mousePositionScaleFactor;
+    PVector locationScaleFactor;
 
     int lastUpdateTime;
 	
-	Fish( PVector location, float maxSpeed, float maxForce ) {
+	Fish( PVector locationScaleFactor, float maxSpeed, float maxForce ) {
         stripeColor = color(int(random(255)), int(random(255)), int(random(255)));
 		bodySizeW		= random( 100, 200 );
 		bodySizeH		= bodySizeW * 0.3 + random( 5 );
         id = "" + random(1000000);
-        createFish(location, maxSpeed, maxForce);
+        mousePositionScaleFactor = new PVector(0, 0);
+
+        createFish(locationScaleFactor, maxSpeed, maxForce);
     }
 
-	Fish( PVector location, PVector mousePosition, Color stripeColor, String id, float maxSpeed, float maxForce, float bodySizeW, float bodySizeH ) {
-        this.mousePosition = mousePosition;
+	Fish( PVector locationScaleFactor, PVector mousePositionScaleFactor, Color stripeColor, String id, float maxSpeed, float maxForce, float bodySizeW, float bodySizeH ) {
+        this.mousePositionScaleFactor = mousePositionScaleFactor;
         this.stripeColor = stripeColor;
         this.id = id;
         this.bodySizeW = bodySizeW;
         this.bodySizeH = bodySizeH;
-        createFish(location, maxSpeed, maxForce);
+
+        createFish(locationScaleFactor, maxSpeed, maxForce);
     }
 
-    void createFish(PVector location, float maxSpeed, float maxForce) {
+    void createFish(PVector locationScaleFactor, float maxSpeed, float maxForce) {
+		PVector location = new PVector(locationScaleFactor.x * width, locationScaleFactor.y * height);
 		super( location, maxSpeed, maxForce );
         mainColor = #000000;
         outlineColor = #D8D8C0;
@@ -52,8 +57,6 @@ class Fish extends Boid {
 		tailSizeW		= bodySizeW * 0.6;
 		tailSizeH		= bodySizeH * 0.25;
 		
-        mousePosition = new PVector(0, 0);
-
 		body = new Flagellum( bodySizeW, bodySizeH, numBodySegments );
 		
 		tailR = new Flagellum( tailSizeW, tailSizeH, numTailSegments );
@@ -97,6 +100,7 @@ class Fish extends Boid {
 		finL.muscleFreq 	= norm( super.velocity.mag(), 0, 1 ) * 0.04;
 		finL.swim();
 
+		PVector mousePosition = new PVector(mousePositionScaleFactor.x * width, mousePositionScaleFactor.y * height);
         seek(mousePosition);
 	}
 	
@@ -296,8 +300,8 @@ class Fish extends Boid {
         return stripeColor;
     }
     
-    public PVector getLocation() {
-        return location;
+    public PVector getLocationScaleFactor() {
+        return new PVector(location.x/width, location.y/height);
     }
 
     public float getMaxSpeed() {
@@ -320,16 +324,16 @@ class Fish extends Boid {
         return id;
     }
     
-    public PVector getMousePosition() {
-        return mousePosition;
+    public PVector getMousePositionScaleFactor() {
+        return mousePositionScaleFactor;
     }
 
     public int getLastUpdateTime() {
         return lastUpdateTime;
     }
 
-    public void setMousePosition(PVector position) {
-        mousePosition = position;
+    public void setMousePositionScaleFactor(PVector position) {
+        mousePositionScaleFactor = position;
     }
 
     public void setLastUpdateTime(int time) {
