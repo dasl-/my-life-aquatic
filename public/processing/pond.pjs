@@ -18,17 +18,24 @@ void setup() {
 
 void draw() {
 	background( 105, 210, 231, 0 );
+
+	ArrayList<String> oldFishes = new ArrayList<String>();
 	
-    Iterator it = fishes.entrySet().iterator();
+    Iterator<Entry<String,Fish>> it = fishes.entrySet().iterator();
     while (it.hasNext()) {
-        Map.Entry pair = (Map.Entry)it.next();
-        Fish fish = (Fish) pair.getValue();
-        if (millis() - fish.getLastUpdateTime() > 1000 && !fish.getId().equals(myId)) {
-            it.remove();
+        Map.Entry<String,Fish> pair = it.next();
+        Fish fish = pair.getValue();
+        if (millis() - fish.getLastUpdateTime() > 5000 && !fish.getId().equals(myId)) {
+        	String oldFishId = pair.getKey();
+        	oldFishes.add(oldFishId);
         } else {
             fish.update();
             fish.render();
         }
+    }
+
+    for (String oldFishId : oldFishes) {
+    	fishes.remove(oldFishId);
     }
 }
 
