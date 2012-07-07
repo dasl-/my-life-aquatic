@@ -41,7 +41,8 @@
 
   function printDebugInfo() {
     var p = Processing.getInstanceById('mycanvas');
-    document.getElementById('debugger').innerHTML = p.getFishes().size();
+    myFish = p.getMyFish();
+    document.getElementById('debugger').innerHTML = myFish.getId();
   }
     
 </script>

@@ -22,7 +22,7 @@ class Fish extends Boid {
     String id;
     PVector mousePosition;
 
-    int timeSinceLastUpdate;
+    int lastUpdateTime;
 	
 	Fish( PVector location, float maxSpeed, float maxForce ) {
         stripeColor = color(int(random(255)), int(random(255)), int(random(255)));
