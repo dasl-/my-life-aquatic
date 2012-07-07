@@ -6,6 +6,24 @@
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
   <script src="http://js.pusher.com/1.12/pusher.min.js"></script>
+  <style type="text/css">
+    canvas {
+      background-image: linear-gradient(bottom, rgb(37,47,156) 0%, rgb(9,148,136) 50%, rgb(158,182,255) 75%);
+      background-image: -o-linear-gradient(bottom, rgb(37,47,156) 0%, rgb(9,148,136) 50%, rgb(158,182,255) 75%);
+      background-image: -moz-linear-gradient(bottom, rgb(37,47,156) 0%, rgb(9,148,136) 50%, rgb(158,182,255) 75%);
+      background-image: -webkit-linear-gradient(bottom, rgb(37,47,156) 0%, rgb(9,148,136) 50%, rgb(158,182,255) 75%);
+      background-image: -ms-linear-gradient(bottom, rgb(37,47,156) 0%, rgb(9,148,136) 50%, rgb(158,182,255) 75%);
+
+      background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(37,47,156)),
+        color-stop(0.5, rgb(9,148,136)),
+        color-stop(0.75, rgb(158,182,255))
+        );
+    }
+  </style>
 </head>
 <body>
 
