@@ -41,7 +41,7 @@
 
   channel.bind('client-update', function(data) {
     var p = Processing.getInstanceById('mycanvas');
-    p.updateRemote(data.myLocation, data.mousePosition, data.stripeColor, data.id, data.maxSpeed, data.maxForce, data.bodySizeW, data.bodySizeH, data.velocity, data.canonicalUnModdedLocation);
+    p.updateRemote(data.myLocation, data.mousePosition, data.stripeColor, data.id, data.maxSpeed, data.maxForce, data.bodySizeW, data.bodySizeH, data.velocity, data.canonicalUnModdedLocation, data.canonicalVelocity);
   });
 
   setInterval(function(){
@@ -63,7 +63,8 @@
         bodySizeW: myFish.getBodySizeW(),
         bodySizeH: myFish.getBodySizeH(),
         velocity: myFish.getVelocity(),
-        canonicalUnModdedLocation: myFish.getCanonicalUnModdedLocation()
+        canonicalUnModdedLocation: myFish.getCanonicalUnModdedLocation(),
+        canonicalVelocity: myFish.getVelocity()
       });
     }
 

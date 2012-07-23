@@ -31,6 +31,10 @@ class Fish extends Boid {
 	 *	that the client does not own.
 	 */
     PVector unModdedLocation;
+    /**
+     *	the velocity, as determined by the fish's owner
+     */
+    PVector canonicalVelocity;
 
     int lastUpdateTime;
 	
@@ -58,6 +62,7 @@ class Fish extends Boid {
         this.velocity = velocity;
         this.canonicalUnModdedLocation = new PVector(canonicalUnModdedLocation.x, canonicalUnModdedLocation.y);
         this.unModdedLocation = new PVector(canonicalUnModdedLocation.x, canonicalUnModdedLocation.y);
+        this.canonicalVelocity = new PVector(velocity.x, velocity.y);
 
         createFish(location, maxSpeed, maxForce);
     }
@@ -91,10 +96,13 @@ class Fish extends Boid {
 		if(!id.equals(myId)) {
 			PVector locationDiscrepancy = PVector.sub(canonicalUnModdedLocation, unModdedLocation);
 			float locationDiscrepancyMag = locationDiscrepancy.mag();
-			PVector locationCorrection = PVector.mult(locationDiscrepancy,0.01);
+			PVector locationCorrection = PVector.mult(locationDiscrepancy,0.1);
 
 			location.add(locationCorrection);
 			unModdedLocation.add(locationCorrection);
+
+
+			this.velocity = canonicalVelocity;
 		}
 
 		super.update();
@@ -449,5 +457,9 @@ class Fish extends Boid {
 
     public PVector getCanonicalUnModdedLocation() {
     	return canonicalUnModdedLocation;
+    }
+
+    public void setCanonicalVelocity(PVector canonicalVelocity) {
+    	this.canonicalVelocity = canonicalVelocity;
     }
 }

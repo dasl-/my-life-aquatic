@@ -79,7 +79,7 @@ Fish getMyFish() {
 
 void updateRemote(PVector myLocation, PVector mousePosition, Color stripeColor, 
 	String id, float maxSpeed, float maxForce, float bodySizeW, float bodySizeH, 
-    PVector velocity, PVector canonicalUnModdedLocation) {
+    PVector velocity, PVector canonicalUnModdedLocation, PVector canonicalVelocity) {
     Fish remoteFish = fishes.get(id);
     if(remoteFish == null) {
         remoteFish = new Fish(new PVector(myLocation.x, myLocation.y), 
@@ -94,6 +94,7 @@ void updateRemote(PVector myLocation, PVector mousePosition, Color stripeColor,
         remoteFish.setLastUpdateTime(millis());
         remoteFish.setVelocity(new PVector(velocity.x, velocity.y));
         remoteFish.setCanonicalUnModdedLocation(new PVector(canonicalUnModdedLocation.x, canonicalUnModdedLocation.y));
+        remoteFish.setCanonicalVelocity(new PVector(canonicalVelocity.x, canonicalVelocity.y));
     }
 }
 
