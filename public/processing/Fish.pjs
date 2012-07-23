@@ -91,7 +91,7 @@ class Fish extends Boid {
 		if(!id.equals(myId)) {
 			PVector locationDiscrepancy = PVector.sub(canonicalUnModdedLocation, unModdedLocation);
 			float locationDiscrepancyMag = locationDiscrepancy.mag();
-			PVector locationCorrection = PVector.mult(locationDiscrepancy,0.1);
+			PVector locationCorrection = PVector.mult(locationDiscrepancy,0.01);
 
 			location.add(locationCorrection);
 			unModdedLocation.add(locationCorrection);
