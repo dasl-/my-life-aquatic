@@ -1,12 +1,31 @@
-<div id="instructions1" class="instructions" style="display:none;position:fixed;top:50px;left:50px;z-index:2;font-weight:bold;font-size:28px;font-family:helvetica,arial;">Welcome to the Aquarium.</div>
-<div id="instructions2" class="instructions" style="display:none;position:fixed;top:100px;left:75px;z-index:2;font-weight:bold;font-size:28px;font-family:helvetica,arial;">Invite your friends to swim together :)</div>
-<div id="credits" style="text-align:right;position:fixed;bottom:5px;right:10px;z-index:2;font-size:15px;font-family:helvetica,arial;color:white;">koi designed by <a style="color:white" href="http://nardove.com/" target="_blank">nardove</a><br>interactive aquarium by <a style="color:white;" href="http://twitter.com/sunahsuh" target="_blank">sunah suh</a> and <a style="color:white" href="http://twitter.com/davidleibovic" target="_blank">david leibovic</a></div>
+<div id="pond-container">
+    <div id="instructions">
+      <div id="instructions1" class="instructions">
+        Welcome to the Aquarium.
+      </div>
+      <div id="instructions2" class="instructions">
+        Invite your friends to swim together :)
+      </div>
+    </div>
 
-<canvas id="mycanvas" data-processing-sources="processing/pond.pjs processing/Fish.pjs processing/Boid.pjs processing/Flagellum.pjs processing/Bubble.pjs"></canvas>
+    <div id="credits">
+      <div>
+        koi designed by 
+        <a href="http://nardove.com/" target="_blank">nardove</a>
+        <br>
+        interactive aquarium by 
+        <a href="http://twitter.com/sunahsuh" target="_blank">sunah suh</a> 
+        and 
+        <a href="http://twitter.com/davidleibovic" target="_blank">david leibovic</a>
+      </div>
+    </div>
+
+
+  <canvas id="mycanvas" data-processing-sources="processing/pond.pjs processing/Fish.pjs processing/Boid.pjs processing/Flagellum.pjs processing/Bubble.pjs"></canvas>
+
+</div>
+
 <!-- <div id="debugger" style="border: 1px solid black; height: 30px; width: 100%"></div> -->
-
-
-
 
 <script type="text/javascript">
   var pusher = new Pusher(<%= render_pusher_key %>);
@@ -22,7 +41,7 @@
 
   channel.bind('client-update', function(data) {
     var p = Processing.getInstanceById('mycanvas');
-    p.updateRemote(data.myLocationScaleFactor, data.mousePositionScaleFactor, data.stripeColor, data.id, data.maxSpeed, data.maxForce, data.bodySizeW, data.bodySizeH);
+    p.updateRemote(data.myLocation, data.mousePosition, data.stripeColor, data.id, data.maxSpeed, data.maxForce, data.bodySizeW, data.bodySizeH, data.velocity, data.canonicalUnModdedLocation);
   });
 
   setInterval(function(){
@@ -35,14 +54,16 @@
     var myFish = p.getMyFish();
     channel.trigger("client-update",
       {
-        myLocationScaleFactor: myFish.getLocationScaleFactor(),
-        mousePositionScaleFactor: myFish.getMousePositionScaleFactor(),
+        myLocation: myFish.getLocation(),
+        mousePosition: myFish.getMousePosition(),
         stripeColor: myFish.getStripeColor(),
         id: myFish.getId(),
         maxSpeed: myFish.getMaxSpeed(),
         maxForce: myFish.getMaxForce(),
         bodySizeW: myFish.getBodySizeW(),
-        bodySizeH: myFish.getBodySizeH()
+        bodySizeH: myFish.getBodySizeH(),
+        velocity: myFish.getVelocity(),
+        canonicalUnModdedLocation: myFish.getCanonicalUnModdedLocation()
       });
     }
 
@@ -50,8 +71,7 @@
     var p = Processing.getInstanceById('mycanvas');
     myFish = p.getMyFish();
     document.getElementById('debugger').innerHTML = myFish.getId();
-  }
-    
+  } 
 </script>
 
 <script>
@@ -66,8 +86,8 @@
     setTimeout(function(){$(".instructions").fadeOut(3500);},28000);
   });
 </script>
-
+<!--
 <audio autoplay="autoplay">
   <source src="audio/swimming-music.ogg" type="audio/ogg" />   
   <source src="audio/swimming-music.mp3" type="audio/mpeg" />
-</audio> 
+</audio> --> 

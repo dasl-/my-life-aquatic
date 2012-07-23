@@ -1,21 +1,24 @@
 class Boid {
 	
 	PVector location;
+
 	PVector velocity;
 	PVector acceleration;
-	
+    PVector location;
+
 	float maxForce;
 	float maxSpeed;
 	float wanderTheta;
 	
 	boolean hasArrive;
 	
-	
-	Boid( PVector _location, float _maxSpeed, float _maxForce ) {
-		velocity 		= new PVector( random( -maxSpeed, maxSpeed ), random( -maxSpeed, maxSpeed ) );
+	// constructor used by fish
+	Boid( PVector _location, float _maxSpeed, float _maxForce) {
         createBoid(_location, _maxSpeed, _maxForce);
+		velocity 		= new PVector( random( -maxSpeed, maxSpeed ), random( -maxSpeed, maxSpeed ) );
     }
 
+    // constructor used by bubbles
     Boid( PVector _location, float _maxSpeed, float _maxForce, PVector velocity) {
         this.velocity = velocity.get();
         createBoid(_location, _maxSpeed, _maxForce);
@@ -23,59 +26,25 @@ class Boid {
 
     void createBoid(PVector _location, float _maxSpeed, float _maxForce) {
 		location 		= _location.get();
-		
 		maxSpeed 		= _maxSpeed;
 		maxForce 		= _maxForce;
-		
-		//velocity 		= new PVector( 0, 0 );
 		acceleration 	= new PVector( 0, 0 );
-		
 		wanderTheta		= 0;
-		
 		hasArrive 		= false;
 	}
 	
-	
 	void update() {
-		velocity.add( acceleration );
-		velocity.limit( maxSpeed );
-		
-		location.add( velocity );
-		
-		acceleration.mult( 0 );
+		velocity.add(acceleration);
+		velocity.limit(maxSpeed);
+		location.add(velocity);
+		acceleration.mult(0);
 	}
-	
-	
-	void checkBorders( float _dist ) {
-		if ( location.x < -_dist ) {
-			location.x = width + _dist;
-		}
-		if ( location.x > width + _dist ) {
-			location.x = -_dist;
-		}
-		
-		if ( location.y < -_dist ) {
-			location.y = height + _dist;
-		}
-		if ( location.y > height + _dist ) {
-			location.y = -_dist;
-		}
-	}
-	
 	
 	void debugRender() {
 		noStroke();
-		fill( 255, 0, 0 );
-		ellipse( location.x, location.y, 10, 10 );
+		fill(255, 0, 0);
+		ellipse(location.x, location.y, 10, 10);
 	}
-	
-	
-	void run() {
-		update();
-		checkBorders( 200 );
-		debugRender();
-	}
-	
 	
 	PVector steer( PVector _target, boolean _slowdown ) {
 		PVector steer;
@@ -107,7 +76,7 @@ class Boid {
 	}
 	
 	
-	void seek( PVector _target ) {
+	void seek(PVector _target) {
 		acceleration.add( steer( _target, false ) );
 	}
 	
@@ -146,7 +115,25 @@ class Boid {
 		PVector predictedTarget = new PVector( _target.x - lookAhead, _target.y - lookAhead );
 		flee( predictedTarget );
 	}
+
+    public float getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public float getMaxForce() {
+        return maxForce;
+    }
+
+    public PVector getVelocity() {
+    	return velocity;
+    }
+
+    public void setVelocity(PVector velocity) {
+    	this.velocity = velocity;
+    }
 	
-	
+    public PVector getLocation() {
+    	return this.location;
+    }
 }
 
