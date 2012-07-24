@@ -50,7 +50,7 @@ public void draw() {
 
     if (!gameOver) {
         Fish myFish = getMyFish();
-        myFish.setBodySizeH(myFish.getBodySizeH()-.005); //-.005
+        myFish.setBodySizeH(myFish.getBodySizeH()-.05); //-.005
         if(myFish.getBodySizeH() < 10)
             endGame();
     }

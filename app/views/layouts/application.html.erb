@@ -5,10 +5,12 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <script src="http://js.pusher.com/1.12/pusher.min.js"></script>
   <script type="text/javascript">
-    //var pusher = new Pusher(<%= render_pusher_key %>);
+    var pusher = new Pusher(<%= render_pusher_key %>);
     var channel = pusher.subscribe("private-aquarium"); 
   </script>
   <%= javascript_include_tag "application" %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/smoothness/jquery-ui.css">
   <%= csrf_meta_tags %>
 </head>
 <body>
