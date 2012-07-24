@@ -21,15 +21,21 @@
     </div>
 
 
-  <canvas id="mycanvas" data-processing-sources="processing/pond.pjs processing/Fish.pjs processing/Boid.pjs processing/Flagellum.pjs processing/Bubble.pjs"></canvas>
+  <canvas id="mycanvas" data-processing-sources="processing/pond.pjs processing/Fish.pjs processing/Boid.pjs processing/Flagellum.pjs processing/Bubble.pjs processing/Food.pjs"></canvas>
 
+</div>
+
+<div id="gameOverDialog" title="You didn't feed your fish!">
+    <p>Your fish has been neglected. It faded away due to starvation! Poor fishy.</p>
 </div>
 
 <!-- <div id="debugger" style="border: 1px solid black; height: 30px; width: 100%"></div> -->
 
 <script type="text/javascript">
-  var pusher = new Pusher(<%= render_pusher_key %>);
-  var channel = pusher.subscribe("private-aquarium");  
+  // the reference to the processing sketch
+  var pjs;
+  // the id of the repeated update events that each local fish makes
+  var intervalId;
 
   channel.bind('pusher:subscription_succeeded', function() {
       sendUpdate();
@@ -39,19 +45,47 @@
     alert("pusher subscription failed: " + status);
   });
 
+  // bind to the repeated updates that each local fish makes about itself.
   channel.bind('client-update', function(data) {
-    var p = Processing.getInstanceById('mycanvas');
-    p.updateRemote(data.myLocation, data.mousePosition, data.stripeColor, data.id, data.maxSpeed, data.maxForce, data.bodySizeW, data.bodySizeH, data.velocity, data.canonicalUnModdedLocation, data.canonicalVelocity);
+    pjs.updateRemoteFish(data.myLocation, data.mousePosition, data.stripeColor, data.id, data.maxSpeed, data.maxForce, data.bodySizeW, data.bodySizeH, data.velocity, data.canonicalUnModdedLocation, data.originalBodySizeW,
+      data.originalBodySizeH, data.startFade);
+    
+    pjs.updateRemoteFood(data.foodLocation, data.foodVelocity, data.foodIsDead, data.foodId, 
+      data.foodColor, data.foodAge, data.foodIsDummy);
   });
 
-  setInterval(function(){
-      sendUpdate();
-      //printDebugInfo();
-  }, 100); // send every 100 milliseconds if position has changed  
+  // bind to the event that a remote fish ate a food
+  channel.bind('client-my-fish-ate', function(data) {
+    pjs.foodEatenByRemoteFish(data.foodEatenId, data.myFishId);
+  });
 
+  // create the repeated pusher updates
+  function createRepeatedUpdateEvents() {
+    if(pjs != null) {
+      intervalId = setInterval(function(){
+        sendUpdate();
+        //printDebugInfo();
+      }, 100); // send every 100 milliseconds if position has changed
+      pjs.setPusherUpdateIntervalId(intervalId);
+    }
+    else
+      setTimeout(createRepeatedUpdateEvents,250);
+  }
+
+  // obtain a reference to the processing sketch
+  function getPjsInstance() {
+    var bound = false;
+    pjs = Processing.getInstanceById('mycanvas');
+    if(pjs != null)
+      bound = true;
+    if(!bound)
+      setTimeout(getPjsInstance, 250);
+  } 
+
+  // the repeated update where each local fish tells others about itself
   function sendUpdate(){
-    var p = Processing.getInstanceById('mycanvas');
-    var myFish = p.getMyFish();
+    var myFish = pjs.getMyFish();
+    var myFood = pjs.getMyFood();
     channel.trigger("client-update",
       {
         myLocation: myFish.getLocation(),
@@ -64,13 +98,22 @@
         bodySizeH: myFish.getBodySizeH(),
         velocity: myFish.getVelocity(),
         canonicalUnModdedLocation: myFish.getCanonicalUnModdedLocation(),
-        canonicalVelocity: myFish.getVelocity()
+        originalBodySizeW: myFish.getOriginalBodySizeW(),
+        originalBodySizeH: myFish.getOriginalBodySizeH(),
+        startFade: myFish.getStartFade(),
+
+        foodLocation: myFood.getLocation(),
+        foodVelocity: myFood.getVelocity(),
+        foodIsDead: myFood.getIsDead(),
+        foodId: myFood.getId(),
+        foodColor: myFood.getColor(),
+        foodAge: myFood.getAge(),
+        foodIsDummy: myFood.getIsDummy(),
       });
-    }
+  }
 
   function printDebugInfo() {
-    var p = Processing.getInstanceById('mycanvas');
-    myFish = p.getMyFish();
+    myFish = pjs.getMyFish();
     document.getElementById('debugger').innerHTML = myFish.getId();
   } 
 </script>
@@ -85,10 +128,13 @@
           });
       });
     setTimeout(function(){$(".instructions").fadeOut(3500);},28000);
+
+   getPjsInstance();
+   createRepeatedUpdateEvents();
   });
 </script>
-<!--
+
 <audio autoplay="autoplay">
   <source src="audio/swimming-music.ogg" type="audio/ogg" />   
   <source src="audio/swimming-music.mp3" type="audio/mpeg" />
-</audio> --> 
+</audio>

@@ -1,43 +1,58 @@
 class Food {
 	
-	PVector location;
-	PVector velocity;
+	private PVector location;
+	private PVector velocity;
 	
-	int age;
-	int ageSpan;
-	int color;
-	int[] colours = new int();
+	private int age;
+	private int ageSpan;
+	private int color;
+	private int[] colours = new int();
 	
-	int numSides	= 8;
-	float[][] verts = new float[numSides][2];
+	private int numSides	= 8;
+	private float[][] verts = new float[numSides][2];
 	
-	boolean isDead;
-	
-	
-	
-	Food( PVector _location ) {
-		location 	= _location;
-		velocity 	= new PVector( random( -1, 1 ), random( -1, 1 ) );
-		velocity.div( 2 );
+	private boolean isDead;
+	private boolean isDummy;
+
+	private String id;
+
+	//constructor used to create your personal local food
+	public Food(PVector location, String id) {
+		velocity 	= new PVector( random( -.5, .5 ), random( -.5, .5 ) );
 		
 		age 		= 0;
-		ageSpan 	= 300; //random( 100, 200 );
 		
 		colors 		= [#C96164, #E8C64D, #9EB53F, #5D966C];
 		int c 		= int(random( 4 ));
-		color 		= colors[c];
-		
-		isDead		= false;
-		
-		float k = TWO_PI / float(numSides);
+
+		createFood(location, colors[c], false, id);
+	}
+
+    // Constructor to create your local representation of a remote food
+    public Food(PVector location, PVector id, PVector velocity, boolean isDead, int age, int color) {
+    	this.age = age;
+    	this.velocity = velocity;
+		createFood(location, color, isDead, id);
+    }
+
+    private void createFood(PVector location, int color, boolean isDead, String id) {
+		this.location 	= location;
+		ageSpan 	= 300; //random( 100, 200 );
+		this.color = color;
+		this.isDead = isDead;
+		this.id = id;
+		this.isDummy = false;
+
+		float k = TWO_PI / (float) numSides;
 		for ( int i = 0; i < numSides; i++ ) {
 			verts[i][0] = cos( k * i ) * random( 3, 15 );
 			verts[i][1] = sin( k * i ) * random( 3, 15 );
 		}
-	}
+    }
+
 	
 	
-	void update() {
+	public void update() {
 		location.add( velocity );
 		
 		age++;
@@ -47,12 +62,12 @@ class Food {
 	}
 	
 	
-	void render() {
+	public void render() {
 		noStroke();
 		fill( color );
 		pushMatrix();
 		translate( location.x, location.y );
-		scale( 1.5 - age / ageSpan );
+		scale(1 - age / ageSpan);
 		beginShape( TRIANGLE_FAN );
 		for ( int i = 0; i < numSides; i++ ) {
 			vertex( verts[i][0], verts[i][1] );
@@ -60,5 +75,48 @@ class Food {
 		endShape();
 		popMatrix();
 	}
-	
+
+	public boolean getIsDead() {
+		return isDead;
+	}
+
+	public void setIsDead(boolean isDead) {
+		this.isDead = isDead;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public PVector getVelocity() {
+		return velocity;
+	}
+
+	public PVector getLocation() {
+		return location;
+	}
+
+	public void setLocation(PVector location){
+		this.location = location;
+	}
+
+	public int getColor() {
+		return this.color;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public void setIsDummy(boolean isDummy) {
+		this.isDummy = isDummy;
+	}
+
+	public boolean getIsDummy() {
+		return this.isDummy;
+	}
 }

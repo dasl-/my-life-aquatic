@@ -21,6 +21,7 @@ group :assets do
 end
 
 gem 'jquery-rails'
+gem 'jquery-ui-themes'
 
 group :production do
   gem 'pg', '0.12.2'
