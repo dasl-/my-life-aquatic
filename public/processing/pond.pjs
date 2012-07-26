@@ -123,7 +123,7 @@ public boolean myFishAteFood(Food food) {
             // halt pusher updates so that the food eaten event is guaranteed
             // to be sent through
             clearInterval(pusherUpdateIntervalId);
-            setTimeout(notifyOthersMyFishAte(food.getId()), 200);
+            setTimeout(function(){notifyOthersMyFishAte(food.getId())}, 200);
         }
     }
 
