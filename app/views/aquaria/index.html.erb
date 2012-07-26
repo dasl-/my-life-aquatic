@@ -27,6 +27,7 @@
 
 <div id="gameOverDialog" title="You didn't feed your fish!">
     <p>Your fish has been neglected. It faded away due to starvation! Poor fishy.</p>
+    <p>Eat the fish food to avoid getting too skinny!</p>
 </div>
 
 <!-- <div id="debugger" style="border: 1px solid black; height: 30px; width: 100%"></div> -->
@@ -36,6 +37,11 @@
   var pjs;
   // the id of the repeated update events that each local fish makes
   var intervalId;
+  var gulp = new buzz.sound("audio/gulp", {
+    formats: [ "ogg", "mp3"]
+  });
+  gulp.setVolume(100);
+
 
   channel.bind('pusher:subscription_error', function(status) {
     alert("pusher subscription failed: " + status);
@@ -52,6 +58,7 @@
 
   // bind to the event that a remote fish ate a food
   channel.bind('client-my-fish-ate', function(data) {
+    gulp.play();
     pjs.foodEatenByRemoteFish(data.foodEatenId, data.myFishId);
   });
 
@@ -130,9 +137,7 @@
   });
 </script>
 
-<!-- 
-<audio autoplay="autoplay">
+<audio autoplay loop>
   <source src="audio/swimming-music.ogg" type="audio/ogg" />   
   <source src="audio/swimming-music.mp3" type="audio/mpeg" />
 </audio>
--->

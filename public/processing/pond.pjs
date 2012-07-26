@@ -116,6 +116,7 @@ public boolean myFishAteFood(Food food) {
         float distanceToFood = PVector.sub(myFish.getLocation(), food.getLocation()).mag();
          if (distanceToFood < 10){
             foodEaten = true;
+            gulp.play();
             myFish.setBodySizeH(myFish.getBodySizeH() + .3 * 8 + 1);
             myFish.setBodySizeW(myFish.getBodySizeW() + 8);
             myFish.setLastAteTimer(int(frameRate/2));
