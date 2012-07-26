@@ -121,8 +121,8 @@ class Fish extends Boid {
 	
 	public void update() {
 		//client side correction for fishes that are not the local fish
-		if(!id.equals(myId))
-			applyClientSideCorrection();
+		// if(!id.equals(myId))
+		// 	applyClientSideCorrection();
 
 		if(startFade && transparency > 0)
 			transparency -= 1;
@@ -357,10 +357,10 @@ class Fish extends Boid {
 		popMatrix();
 	}
 
-	private void applyClientSideCorrection() {
+	public void applyClientSideCorrection() {
 		// correct location discrepancies
 		PVector locationDiscrepancy = PVector.sub(canonicalUnModdedLocation, unModdedLocation);
-		PVector locationCorrection = PVector.mult(locationDiscrepancy,0.1);
+		PVector locationCorrection = PVector.mult(locationDiscrepancy,.1);
 
 		location.add(locationCorrection);
 		unModdedLocation.add(locationCorrection);

@@ -50,7 +50,7 @@ public void draw() {
 
     if (!gameOver) {
         Fish myFish = getMyFish();
-        myFish.setBodySizeH(myFish.getBodySizeH()-.05); //-.005
+        myFish.setBodySizeH(myFish.getBodySizeH()-.005); //-.005
         if(myFish.getBodySizeH() < 10)
             endGame();
     }
@@ -123,7 +123,7 @@ public boolean myFishAteFood(Food food) {
             // halt pusher updates so that the food eaten event is guaranteed
             // to be sent through
             clearInterval(pusherUpdateIntervalId);
-            setTimeout(notifyOthersMyFishAte(food.getId()), 200);
+            setTimeout(function(){notifyOthersMyFishAte(food.getId())}, 200);
         }
     }
 
@@ -144,6 +144,7 @@ function notifyOthersMyFishAte(foodEatenId) {
 
 public void foodEatenByRemoteFish(String foodEatenId, String remoteFishId) {
     foods.remove(foodEatenId);
+    alert("remoteId: " + remoteFishId + " remoteFish: " + fishes.get(remoteFishId));
     fishes.get(remoteFishId).setLastAteTimer(frameRate/2);
 }
 
@@ -175,6 +176,7 @@ public void updateRemoteFish(PVector myLocation, PVector mousePosition, Color st
 	String id, float maxSpeed, float maxForce, float bodySizeW, float bodySizeH, 
     PVector velocity, PVector canonicalUnModdedLocation, float originalBodySizeW,
     float originalBodySizeH, boolean startFade) {
+    //if(random(100)<1) alert(myLocation);
     Fish remoteFish = fishes.get(id);
     if(remoteFish == null) {
         remoteFish = new Fish(new PVector(myLocation.x, myLocation.y), 
@@ -194,6 +196,7 @@ public void updateRemoteFish(PVector myLocation, PVector mousePosition, Color st
         remoteFish.setBodySizeW(bodySizeW);
         remoteFish.setBodySizeH(bodySizeH);
         remoteFish.setStartFade(startFade);
+        remoteFish.applyClientSideCorrection();
     }
 }
 
@@ -240,4 +243,15 @@ public void endGame() {
             modal: true
         });
 
+}
+
+public int getFishesInfo() {
+
+    String info = "myId: " + myId + "\n" + "size: " + fishes.size() + "\n";
+    for(String key : fishes.keySet()){
+        info += key + "\n";
+        info += "color: " + fishes.get(key).getStripeColor() + "\n";
+        info += "location: " + int(fishes.get(key).getLocation().x) + ", " + int(fishes.get(key).getLocation().y) +"\n";
+    }
+    return info;
 }
