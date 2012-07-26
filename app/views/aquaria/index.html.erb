@@ -1,7 +1,7 @@
 <div id="pond-container">
     <div id="instructions">
       <div id="instructions1" class="instructions">
-        Welcome to the Aquarium.
+        Welcome to the Aquarium. Eat the fish food so you don't get too skinny!
       </div>
       <div id="instructions2" class="instructions">
         Invite your friends to swim together :)
@@ -36,10 +36,6 @@
   var pjs;
   // the id of the repeated update events that each local fish makes
   var intervalId;
-
-  channel.bind('pusher:subscription_succeeded', function() {
-      sendUpdate();
-  });
 
   channel.bind('pusher:subscription_error', function(status) {
     alert("pusher subscription failed: " + status);

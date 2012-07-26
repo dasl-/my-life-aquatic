@@ -194,6 +194,7 @@ public void updateRemoteFish(PVector myLocation, PVector mousePosition, Color st
         remoteFish.setBodySizeW(bodySizeW);
         remoteFish.setBodySizeH(bodySizeH);
         remoteFish.setStartFade(startFade);
+        remoteFish.applyClientSideCorrection();
     }
 }
 

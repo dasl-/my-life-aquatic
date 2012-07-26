@@ -120,10 +120,6 @@ class Fish extends Boid {
 	}
 	
 	public void update() {
-		//client side correction for fishes that are not the local fish
-		if(!id.equals(myId))
-			applyClientSideCorrection();
-
 		if(startFade && transparency > 0)
 			transparency -= 1;
 
@@ -357,7 +353,12 @@ class Fish extends Boid {
 		popMatrix();
 	}
 
-	private void applyClientSideCorrection() {
+	/**
+	 *	client side correction to correct velocity/location discrepancies between the local
+	 *	representation of a remote fish. This is called from the updateRemoteFish method
+	 *	in the Pond.
+	 */
+	public void applyClientSideCorrection() {
 		// correct location discrepancies
 		PVector locationDiscrepancy = PVector.sub(canonicalUnModdedLocation, unModdedLocation);
 		PVector locationCorrection = PVector.mult(locationDiscrepancy,0.1);
