@@ -3,7 +3,7 @@
 
 Fish constantly get skinnier. To avoid starving, eat the food that periodically appears in the aquarium.
 
-my life aquatic is featured on the [Processing.js exhibition page](http://processingjs.org/exhibition/).
+my life aquatic is featured on the [Processing.js exhibition page](http://processingjs.org/exhibition/) and is home to ~100 hungry fishies daily.
 
 ## Technical Notes of Interest
 
@@ -38,9 +38,10 @@ Each player's representation of another player's fish has a `canonicalUnModdedLo
 
 With each rendering of the aquarium, player `B` will apply client side correction to his representation of player `A`'s fish so that it approximates the fish's `canonicalUnModdedLocation`. Game state out of sync issues across aquarium players become negligible with this correction.
 
+The astute reader may wonder why we use the term `UnModded` in our variable names. Recall that fish wrap around the aquarium. A fish that swims past the right edge of the aquarium will soon be seen entering the aquarium from the left side. A fish that swims past the bottom edge of the aquarium will soon be seen entering the aquarium from the top. The in order for Processing to render the fish, it needs their x and y coordinates modulo the width and height of the aquarium respectively. Now, consider what the client side correction algorithm would do when player `A` swims his fish past the right edge of the screen. At any time `t`, Player `B`'s representation of player `A`'s fish will be slightly behind player `A`'s representation of player `A`'s fish, due to network latency. Let us say the width of the aquarium is 1000px. If we transmitted only the modded locations of player `A`'s fish, then when player `A`'s fish wraps around to the left side of the screen, it would transmit a location of 0 for the x coordinate. Meanwhile, player `B`'s representation of player `A`'s fish is slightly behind at perhaps an x coordinate of 997. Upon receiving the canonical location of player `A`'s fish of x = 0, player `B`'s client side correction would kick into overdrive for his representation of player `A`'s fish. There would be a perceived location discrepancy of 997 pixels, and player `B` would see his representation of player `A`'s fish swim wildly backward (from right to left) across the screen, rather than continuing to wrap around the screen on its actual trajectory from left to right.
 
+By transmitting the unmodded coordinates of player `A`'s fish location to player `B`, instead of sending x = 0, as the fish entered from the left side of the aquarium, we would send x = 1001, and the client side correction would work as desired. In order to render the fish on screen, Processing of course needs the x location modulo 1000, which we can do after the client side correction has been applied.
 
+In the aquarium, fish must travel a distance of `l` off the edge of the aquarium before appearing on the opposite edge of the aqiarum, where `l` is the fish's length. This adds another layer of complexity to our algorithm, as we must implement our own rounding algorithm to compute a fish's unmodded location.
 
-
-
-Aside from learning about processing and web sockets, this project taught me a lot about dealing with latency issues in networked games and keeping game state in sync across all players. I implemented a client side correction algorithm to this end. The aquarium is now featured on the processing exhibition page at http://processingjs.org/exhibition/ , where it is home to upward of 100 fishies daily.
+Ah, the joys of keeping game state in sync across all players while compensating for network lag!
