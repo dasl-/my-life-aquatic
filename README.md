@@ -42,6 +42,22 @@ The astute reader may wonder why we use the term `UnModded` in our variable name
 
 By transmitting the unmodded coordinates of player `A`'s fish location to player `B`, instead of sending x = 0, as the fish entered from the left side of the aquarium, we would send x = 1001, and the client side correction would work as desired. In order to render the fish on screen, Processing of course needs the x location modulo 1000, which we can do after the client side correction has been applied.
 
-In the aquarium, fish must travel a distance of `l` off the edge of the aquarium before appearing on the opposite edge of the aqiarum, where `l` is the fish's length. This adds another layer of complexity to our algorithm, as we must implement our own rounding algorithm to compute a fish's unmodded location.
+In the aquarium, fish must travel a distance of `l` off the edge of the aquarium before appearing on the opposite edge of the aqiarum, where `l` is the fish's length. This adds another layer of complexity to our algorithm, as we must implement our own rounding algorithm to compute a fish's unmodded location. For example:
+
+```java
+private int roundToNearestRightBoundary(int currentX) {
+	int nearestRightBoundary;
+	int roundingWidth = width + 2 * bodySizeW;
+	int adjustedCurrentX = currentX + 2 * bodySizeW;
+	float multiple = adjustedCurrentX / (float) roundingWidth;
+	if(ceil(multiple) - multiple < multiple - floor(multiple)) {
+		nearestRightBoundary = ceil(multiple) * roundingWidth - 2 * bodySizeW;
+	}
+	else {
+		nearestRightBoundary = floor(multiple) * roundingWidth - 2 * bodySizeW;
+	}
+	return nearestRightBoundary
+}
+```
 
 Ah, the joys of keeping game state in sync across all players while compensating for network lag!
