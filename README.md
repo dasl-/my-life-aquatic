@@ -34,8 +34,7 @@ public void applyClientSideCorrection() {
 }
 ```
 
-Each player's representation of another player's fish has a `canonicalUnModdedLocation`
-
+Each player's representation of another player's fish has a `canonicalUnModdedLocation` and an `unModdedLocation`. Let us define an aquarium with two players, `A` and `B`. Player `B`'s representation of player `A`'s fish will have a `canonicalUnModdedLocation` (the location of player `A`'s fish in player `A`'s aquarium) and an `unModdedLocation` (the location of player `A`'s fish in player `B`'s aquarium)
 
 
 
