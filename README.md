@@ -13,6 +13,7 @@ In the Pusher messages, we transmit mouse x,y coordinates so that each client ca
 
 To remedy this situation, we use client side correction:
 
+	```java
 	/**
 	 *	client side correction to correct velocity/location discrepancies between the local
 	 *	representation of a remote fish. This is called from the updateRemoteFish method
@@ -31,7 +32,9 @@ To remedy this situation, we use client side correction:
 		PVector velocityCorrection = PVector.mult(velocityDiscrepancy,0.5);
 		velocity.add(velocityCorrection);
 	}
+	```
 
+Each player's representation of another player's fish has a `canonicalUnModdedLocation`
 
 
 
