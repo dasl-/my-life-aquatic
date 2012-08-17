@@ -1,4 +1,6 @@
 ## Summary
+![my life aquatic](http://i.imgur.com/AZWT5.png "my life aquatic")
+
 [my life aquatic](http://mylifeaquatic.herokuapp.com/) is a shared aquarium using Processing.js and web sockets. Sound effects with buzz.js. To our knowledge, this is the first time Processing.js has been combined with web sockets. Each user that visits the website will be granted a fish to control. Simultaneous visitors to the site will be able to see and iteract with each other's fish in their browsers. This proof of concept shows promise for the future of multiplayer in browser games built using Processing.js.
 
 Fish constantly get skinnier. To avoid starving, eat the food that periodically appears in the aquarium.
@@ -6,6 +8,8 @@ Fish constantly get skinnier. To avoid starving, eat the food that periodically 
 my life aquatic is featured on the [Processing.js exhibition page](http://processingjs.org/exhibition/) and is home to ~100 hungry fishies daily.
 
 ## Technical Notes of Interest
+
+The code for the Processing files is located [here](https://github.com/davidleibovic/my-life-aquatic/tree/master/public/processing). Of particular interest would be the [pond](https://github.com/davidleibovic/my-life-aquatic/blob/master/public/processing/pond.pjs) and [fish](https://github.com/davidleibovic/my-life-aquatic/blob/master/public/processing/Fish.pjs) files.
 
 We use Pusher as our websockets provider. Pusher limits the number of messages that can be transmitted to 10 per second per client. The aquarium maxes out the Pusher message rate. Thus, if the aquarium had five simultaneous users, each user would be receiving 40 messages per second and sending 10 messages per second.
 
