@@ -1,7 +1,5 @@
 ## Summary
-![my life aquatic](http://i.imgur.com/AZWT5.png "my life aquatic")
-
-[my life aquatic](http://mylifeaquatic.herokuapp.com/) is a shared aquarium using Processing.js and web sockets. Sound effects with buzz.js. To our knowledge, this is the first time Processing.js has been combined with web sockets. Each user that visits the website will be granted a fish to control. Simultaneous visitors to the site will be able to see and iteract with each other's fish in their browsers. This proof of concept shows promise for the future of multiplayer in browser games built using Processing.js.
+![my life aquatic](http://i.imgur.com/AZWT5.png "my life aquatic") [my life aquatic](http://mylifeaquatic.herokuapp.com/) is a shared aquarium using Processing.js and web sockets. Sound effects with buzz.js. To our knowledge, this is the first time Processing.js has been combined with web sockets. Each user that visits the website will be granted a fish to control. Simultaneous visitors to the site will be able to see and iteract with each other's fish in their browsers. This proof of concept shows promise for the future of multiplayer in browser games built using Processing.js.
 
 Fish constantly get skinnier. To avoid starving, eat the food that periodically appears in the aquarium.
 
