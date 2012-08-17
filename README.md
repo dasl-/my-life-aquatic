@@ -44,7 +44,7 @@ public void applyClientSideCorrection() {
 }
 ```
 
-Each player's representation of another player's fish has a `canonicalUnModdedLocation` and an `unModdedLocation`. Let us define an aquarium with two players, `A` and `B`. Player `B`'s representation of player `A`'s fish will have a `canonicalUnModdedLocation` (the location of player `A`'s fish in player `A`'s aquarium) and an `unModdedLocation` (the location of player `A`'s fish in player `B`'s aquarium).
+Each player's representation of another player's fish has a `canonicalUnModdedLocation` and an `unModdedLocation`. Player `B`'s representation of player `A`'s fish will have a `canonicalUnModdedLocation` (the location of player `A`'s fish in player `A`'s aquarium) and an `unModdedLocation` (the location of player `A`'s fish in player `B`'s aquarium).
 
 With each rendering of the aquarium, player `B` will apply client side correction to his representation of player `A`'s fish so that it approximates the fish's `canonicalUnModdedLocation`. Game state out of sync issues across aquarium players become negligible with this correction.
 
