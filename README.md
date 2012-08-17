@@ -1,7 +1,7 @@
 ## Summary
 ![my life aquatic](http://i.imgur.com/AZWT5.png "my life aquatic")
 
-[my life aquatic](http://mylifeaquatic.herokuapp.com/) is a shared aquarium using Processing.js and web sockets. Sound effects with buzz.js. To our knowledge, this is the first time Processing.js has been combined with web sockets. Each user that visits the website will be granted a fish to control. Simultaneous visitors to the site will be able to see and iteract with each other's fish in their browsers. This proof of concept shows promise for the future of multiplayer in browser games built using Processing.js.
+[my life aquatic](http://mylifeaquatic.herokuapp.com/) is a shared aquarium using Processing.js and web sockets. Sound effects with buzz.js. To our knowledge, this is the first time Processing.js has been combined with web sockets. Each user that visits the website will be granted a fish to control. Simultaneous visitors to the site will be able to see and interact with each other's fish in their browsers. This proof of concept shows promise for the future of multiplayer in browser games built using Processing.js.
 
 Fish constantly get skinnier. To avoid starving, eat the food that periodically appears in the aquarium.
 
@@ -13,7 +13,7 @@ The code for the Processing files is located [here](https://github.com/davidleib
 
 We use Pusher as our websockets provider. Pusher limits the number of messages that can be transmitted to 10 per second per client. The aquarium maxes out the Pusher message rate. Thus, if the aquarium had five simultaneous users, each user would be receiving 40 messages per second and sending 10 messages per second.
 
-In the Pusher messages, we transmit mouse x,y coordinates so that each client can run its own simulation of another user's fish movement given a sequence of received x,y coordinates. The fish's owner's mouse could easily cover 100+ different x,y coordinates per second if the fish's owner is actively moving his mouse. As we are rate limited to sending 10 messages per second via Pusher, only 10 of these x,y coordinates will be transmitted. Another player's representation of this fish could get arbitrarily out of sync with the owner's local representation since the owner's fish movement simulation is acting on a different sequence of x,y coordinates than the remote client's fish movement simulation. This is bad if we value keeping the positions of the fish in sync across aquarium players.
+In the Pusher messages, we transmit mouse x,y coordinates so that each client can run its own simulation of another user's fish movement given a sequence of received x,y coordinates. Let us define an aquarium with two players, `A` and `B`. Player `A`'s mouse could easily cover 100+ different x,y coordinates per second if player `A` is actively moving his mouse. As we are rate limited to sending 10 messages per second via Pusher, only 10 of these x,y coordinates will be transmitted to player `B`. Thus, player `B`'s representation of player `A`'s fish could get arbitrarily out of sync with player `A`'s representation of his own fish since player `A`'s fish movement simulation of his own fish is acting on all 100+ x,y coordinates in sequence, while player `B`'s representation of this fish is only acting on at most 10 x,y coordinates in sequence per second. This is bad if we value keeping the positions of the fish in sync across aquarium players.
 
 To remedy this situation, we use client side correction:
 
