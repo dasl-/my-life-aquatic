@@ -13,26 +13,26 @@ In the Pusher messages, we transmit mouse x,y coordinates so that each client ca
 
 To remedy this situation, we use client side correction:
 
-	```java
-	/**
-	 *	client side correction to correct velocity/location discrepancies between the local
-	 *	representation of a remote fish. This is called from the updateRemoteFish method
-	 *	in the Pond.
-	 */
-	public void applyClientSideCorrection() {
-		// correct location discrepancies
-		PVector locationDiscrepancy = PVector.sub(canonicalUnModdedLocation, unModdedLocation);
-		PVector locationCorrection = PVector.mult(locationDiscrepancy,0.1);
+```java
+/**
+ *	client side correction to correct velocity/location discrepancies between the local
+ *	representation of a remote fish. This is called from the updateRemoteFish method
+ *	in the Pond.
+ */
+public void applyClientSideCorrection() {
+	// correct location discrepancies
+	PVector locationDiscrepancy = PVector.sub(canonicalUnModdedLocation, unModdedLocation);
+	PVector locationCorrection = PVector.mult(locationDiscrepancy,0.1);
 
-		location.add(locationCorrection);
-		unModdedLocation.add(locationCorrection);
+	location.add(locationCorrection);
+	unModdedLocation.add(locationCorrection);
 
-		// correct velocity discrepancies
-		PVector velocityDiscrepancy = PVector.sub(canonicalVelocity, velocity);
-		PVector velocityCorrection = PVector.mult(velocityDiscrepancy,0.5);
-		velocity.add(velocityCorrection);
-	}
-	```
+	// correct velocity discrepancies
+	PVector velocityDiscrepancy = PVector.sub(canonicalVelocity, velocity);
+	PVector velocityCorrection = PVector.mult(velocityDiscrepancy,0.5);
+	velocity.add(velocityCorrection);
+}
+```
 
 Each player's representation of another player's fish has a `canonicalUnModdedLocation`
 
